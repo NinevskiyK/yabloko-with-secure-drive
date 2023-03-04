@@ -25,7 +25,9 @@ size is in bytes, name is 0-terminated.
 enum {
 	sector_size = 512,
 	ents_in_dir = 15,
-	kernel_size_in_offset = 1
+	mbr_size_in_offset = 1,
+	block_size = 32,
+	blocks_in_sector = 16
 };
 
 struct dirent {

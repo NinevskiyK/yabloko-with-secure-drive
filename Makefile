@@ -1,5 +1,7 @@
 GDB=gdb
 OBJCOPY=objcopy
+IV=166352418
+ENC_KEY=42
 
 ifeq ($(shell uname -s),Darwin)
 AS=x86_64-elf-as
@@ -85,7 +87,7 @@ debug-nox: image.bin
 		-ex "continue"
 
 fs.img: kernel.bin tools/mkfs user/false user/greet user/div0
-	tools/mkfs $@ $< user/false user/greet user/div0
+	tools/mkfs $(IV) $(ENC_KEY) $@ $< user/false user/greet user/div0 
 
 LDFLAGS=-m elf_i386
 

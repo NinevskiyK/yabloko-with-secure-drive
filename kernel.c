@@ -11,7 +11,29 @@ asm(".asciz \"kernel start\\n\"");
 #include "fs/fs.h"
 #include "lib/string.h"
 #include "proc.h"
+#include "lib/errno.h"
 
+void init_encryption_key() {
+    printk("Please, enter the encryption key, and then press enter: ");
+    while (1) {
+        if (kbd_buf_size > 0 && kbd_buf[kbd_buf_size-1] == '\n') {
+            kbd_buf[kbd_buf_size-1] = '\0';
+            m_errno = 0;
+            long n = strtoi(kbd_buf);
+            if (m_errno) {
+                if (m_errno == NAN_ERR) {
+                    panic("Not a number!");
+                } else {
+                    panic("Key is too big!");
+                }
+            }
+            kbd_buf_size = 0;
+            asm ("mov %%eax, %%cr3" : : "a"(n));
+            return;
+        }
+        asm("hlt");
+    }
+}
 
 void _start() {
     load_gdt();
@@ -21,6 +43,7 @@ void _start() {
     sti();
 
     vga_clear_screen();
+    init_encryption_key();
     printk("YABLOKO\n");
 
     printk("\n> ");
