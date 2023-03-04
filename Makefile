@@ -23,8 +23,8 @@ ASMFLAGS = -target elf-i386 -ffreestanding -c -g
 LDKERNELFLAGS = --script=script.ld
 endif
 
-OBJECTS = kernel.o console.o drivers/vga.o drivers/uart.o drivers/keyboard.o \
-	cpu/idt.o cpu/gdt.o cpu/swtch.o cpu/vectors.o lib/mem.o proc.o lib/string.o \
+OBJECTS = kernel.o console.o drivers/vga.o drivers/uart.o drivers/keyboard.o drivers/ata.o \
+	cpu/idt.o cpu/gdt.o cpu/swtch.o cpu/vectors.o lib/mem.o proc.o lib/string.o lib/errno.o \
 	fs/fs.o
 
 run: image.bin

@@ -7,7 +7,10 @@
          32-byte entries
 ┌───────────────────────────────┐
 │Reserved                       │
-│char[32]                       │
+│char[28]                       │
+|───────────────────────────────|
+│Initialization vector          │
+│uint32                         │
 ├──────┬──────┬────────┬────────┤
 │Offset│Size  │Reserved│Name    │
 │uint32│uint32│uint32  │char[20]│
@@ -22,6 +25,7 @@ size is in bytes, name is 0-terminated.
 enum {
 	sector_size = 512,
 	ents_in_dir = 15,
+	kernel_size_in_offset = 1
 };
 
 struct dirent {
@@ -32,13 +36,15 @@ struct dirent {
 };
 
 struct dir {
-	char reserved[32];
+	char reserved[28];
+	uint32_t init_vector;
 	struct dirent entries[ents_in_dir];
 };
 
 struct stat {
 	uint32_t size;
-	uint32_t reserved[3];
+	uint32_t offset_sectors;
+	uint32_t reserved[2];
 };
 
 /* Find file by name and fill information in buf.
