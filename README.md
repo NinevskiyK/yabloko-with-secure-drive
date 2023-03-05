@@ -7,7 +7,7 @@
 * Add functions to read files from encrypted disk to RAM 'on-the-fly'
 
 ### How does it work?
-* I use [ECB](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Electronic_codebook_(ECB)) mode and [XOR cipher](https://en.wikipedia.org/wiki/XOR_cipher) to encrypt the drive
+* I use [CBC](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_block_chaining_(CBC)) mode and [XOR cipher](https://en.wikipedia.org/wiki/XOR_cipher) to encrypt the drive
 * You can find the `IV` and `ENC_KEY` constants on the beggining of the Makefile
 * When user boot OS, he enters the key which is stored in `cr3` register
 * When user wants to run a program, the code of program decrypts using the key entered by the user. If the key right, the program runs, otherwise it's not.
