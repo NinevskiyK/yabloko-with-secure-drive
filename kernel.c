@@ -19,8 +19,10 @@ void init_encryption_key() {
         if (kbd_buf_size > 0 && kbd_buf[kbd_buf_size-1] == '\n') {
             kbd_buf[kbd_buf_size-1] = '\0';
             m_errno = 0;
-            long n = strtoi(kbd_buf);
+            volatile long n = strtoi(kbd_buf); // volatile - to sync every time 'n' changes
+            memset(kbd_buf, 0, kbd_buf_size);
             if (m_errno) {
+                n = 0; // clear key
                 if (m_errno == NAN_ERR) {
                     panic("Not a number!");
                 } else {
@@ -28,7 +30,9 @@ void init_encryption_key() {
                 }
             }
             kbd_buf_size = 0;
-            asm ("mov %%eax, %%cr3" : : "a"(n));
+            asm ("mov %%eax, %%cr3\n\t"
+                "xor %%eax, %%eax" : : "a"(n));
+            n = 0; // clear key
             return;
         }
         asm("hlt");

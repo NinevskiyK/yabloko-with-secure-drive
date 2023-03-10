@@ -27,7 +27,8 @@ static void decrypt_block(void *buf, uint32_t *prev) {
     uint32_t temp = *prev;
     *prev = *block;
     asm("mov %%cr3, %%eax\n\t"
-        "xor %%eax, %%ebx\n\t" : "=b"(*block) : "b"(*block) : "eax");
+        "xor %%eax, %%ebx\n\t"
+        "xor %%eax, %%eax\n\t" : "=b"(*block) : "b"(*block) : "eax");
     *block ^= temp;
 }
 
